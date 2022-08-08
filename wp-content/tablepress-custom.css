@@ -1,0 +1,12 @@
+.row-1 [class^="column-"] {
+	background: #ec2027;
+	color: white;
+}
+
+.row-1 [class^="column-"] span {
+	color: #ffd300;
+}
+
+td[colspan] {
+	text-align: center;
+}
