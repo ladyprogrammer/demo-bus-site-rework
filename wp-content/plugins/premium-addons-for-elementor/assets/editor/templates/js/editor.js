@@ -1015,7 +1015,7 @@
                     },
                     success: function (response) {
 
-                        console.log("% cTemplates Retrieved Successfully!!", "color: #7a7a7a; background - color: #eee; ");
+                        console.log("%c Templates Retrieved Successfully!!", "color: #7a7a7a; background-color: #eee;");
 
                         var templates = new PremiumEditorViews.LibraryCollection(response.data.templates),
                             categories = new PremiumEditorViews.CategoriesCollection(response.data.categories);

@@ -9,8 +9,8 @@
         document.cookie = "localTimeZone=" + localTimeZone + ";SameSite=Strict;" + isSecured;
 
         //Returning User condition cookie.
-        if (PremiumSettings)
-            document.cookie = "isReturningVisitor" + PremiumSettings.pageID + "=true;SameSite=Strict;" + isSecured;
+        if (elementorFrontend.config.post.id)
+            document.cookie = "isReturningVisitor" + elementorFrontend.config.post.id + "=true;SameSite=Strict;" + isSecured;
 
     });
 

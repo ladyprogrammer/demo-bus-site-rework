@@ -2525,7 +2525,7 @@
              */
             function stretchDropdown($menu) {
 
-                var $parentSec = $($scope).closest('.elementor-top-section'),
+                var $parentSec = $($scope).closest('.elementor-top-section, .e-container--row'),
                     width = $($parentSec).outerWidth(),
                     widgetTop = $scope.offset().top,
                     parentBottom = $($parentSec).offset().top + $($parentSec).outerHeight(),

@@ -77,18 +77,6 @@ class Module {
 			wp_enqueue_script( 'pa-dis-conditions' );
 		}
 
-		$page_id = get_the_ID();
-
-		if ( $page_id ) {
-			wp_localize_script(
-				'pa-dis-conditions',
-				'PremiumSettings',
-				array(
-					'pageID' => $page_id,
-				)
-			);
-		}
-
 	}
 
 	/**
@@ -301,13 +289,6 @@ class Module {
 				'type'        => Controls_Manager::REPEATER,
 				'label_block' => true,
 				'fields'      => $repeater->get_controls(),
-				'default'     => array(
-					array(
-						'pa_condition_key'      => 'browser',
-						'pa_condition_operator' => 'is',
-						'pa_condition_browser'  => 'chrome',
-					),
-				),
 				'title_field' => '<# print( pa_condition_key.replace(/_/g, " ").split(" ").map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(" ")) #>',
 				'condition'   => array(
 					'pa_display_conditions_switcher' => 'yes',
