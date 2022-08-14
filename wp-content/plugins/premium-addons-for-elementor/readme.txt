@@ -5,7 +5,7 @@ Donate Link: https://premiumaddons.com/?utm_source=wp-repo&utm_medium=link&utm_c
 Requires at least: 5.0
 Tested Up To: 6.0.1
 Requires PHP: 5.4
-Stable Tag: 4.9.23
+Stable Tag: 4.9.24
 License: GPL v3.0
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -214,6 +214,14 @@ Premium Addons for Elementor is 100% Ads Free, Ads can only be detected from You
 14. Premium Progress Bar Widget for Elementor
 
 == Changelog ==
+
+= 4.9.24 =
+
+- Fixed: Comatibility issues with Elementor v3.7.0.
+- Fixed: Copy/Paste element styling not working after Elementor v3.7.0.
+- Fixed: Returning Visitor Display Condition causing issues with AJAX requests.
+- Fixed: ACF Text Display Condition not comparing empty values.
+- Fixed: Widgets` styling broken when Dynamic Assets Generate option is enabled on password-protected websites.
 
 = 4.9.23 =
 

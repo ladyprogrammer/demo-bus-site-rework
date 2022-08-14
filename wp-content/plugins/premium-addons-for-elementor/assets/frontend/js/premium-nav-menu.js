@@ -18,8 +18,8 @@
             $centeredItems = $scope.find('.premium-mega-content-centered'),
             stickyProps = {},
             refreshPos = false,
-            stickyIndex = 'stickyPos' +  $scope.data('id'),
-            stickyWidthIndex = 'stickyWidth' +  $scope.data('id');
+            stickyIndex = 'stickyPos' + $scope.data('id'),
+            stickyWidthIndex = 'stickyWidth' + $scope.data('id');
 
         /**
          * Save current device to use it later to determine if the device changed on resize.
@@ -50,7 +50,7 @@
             } else {
                 // $menuContainer.toggleClass('premium-active-menu');
                 if ($($menuContainer).hasClass('premium-active-menu')) {
-                    $scope.find('.premium-mobile-menu-container').slideUp('slow', function() {
+                    $scope.find('.premium-mobile-menu-container').slideUp('slow', function () {
                         $menuContainer.removeClass('premium-active-menu');
                         $scope.find('.premium-mobile-menu-container').show();
                     });
@@ -91,11 +91,11 @@
             $scope.find('.premium-mobile-menu-outer-container, .premium-nav-slide-overlay').removeClass('premium-vertical-toggle-open');
         });
 
-        $(document).on('click.PaCloseMegaMenu', function(event) {
+        $(document).on('click.PaCloseMegaMenu', function (event) {
             var isTabsItem = $(event.target).closest('.premium-tabs-nav-list-item').length,
                 isWidgetContainer = $(event.target).closest('.premium-nav-widget-container').length;
 
-            if ( !isWidgetContainer && !isTabsItem) {
+            if (!isWidgetContainer && !isTabsItem) {
                 if ($($menuContainer).hasClass('premium-active-menu')) {
                     $menuToggler.click();
                 }
@@ -104,7 +104,7 @@
 
         $(window).on('resize', function () {
 
-            if ( window.PaCurrStickyDevice !== elementorFrontend.getCurrentDeviceMode()) {
+            if (window.PaCurrStickyDevice !== elementorFrontend.getCurrentDeviceMode()) {
                 refreshPos = true;
                 window.PaCurrStickyDevice = elementorFrontend.getCurrentDeviceMode();
             }
@@ -115,7 +115,7 @@
 
         // vertical toggler.
         if ($scope.hasClass('premium-ver-toggle-yes') && $scope.hasClass('premium-ver-click')) {
-            $scope.find('.premium-ver-toggler').on('click', function() {
+            $scope.find('.premium-ver-toggler').on('click', function () {
                 $scope.find('.premium-nav-widget-container').toggleClass('premium-ver-collapsed', 500);
             });
         }
@@ -125,7 +125,7 @@
             //Trigger small screen menu.
             if (settings.breakpoint >= $(window).width() && !isMobileMenu) {
                 // remove the vertical toggler.
-                $scope.find('.premium-ver-toggler').css('display','none');
+                $scope.find('.premium-ver-toggler').css('display', 'none');
                 $scope.addClass('premium-hamburger-menu');
                 $scope.find('.premium-active-menu').removeClass('premium-active-menu');
                 stretchDropdown($scope.find('.premium-stretch-dropdown .premium-mobile-menu-container'));
@@ -138,7 +138,7 @@
 
                 // show the vertical toggler if enabled.
                 if ($scope.hasClass('premium-ver-toggle-yes')) {
-                    $scope.find('.premium-ver-toggler').css('display','flex');
+                    $scope.find('.premium-ver-toggler').css('display', 'flex');
                 }
 
                 $menuToggler.removeClass('premium-toggle-opened');
@@ -159,7 +159,7 @@
          */
         function stretchDropdown($menu) {
 
-            var $parentSec = $($scope).closest('.elementor-top-section'),
+            var $parentSec = $($scope).closest('.elementor-top-section, .e-container--row'),
                 width = $($parentSec).outerWidth(),
                 widgetTop = $scope.offset().top,
                 parentBottom = $($parentSec).offset().top + $($parentSec).outerHeight(),
@@ -181,21 +181,21 @@
 
             var isSticky = $scope.hasClass('premium-nav-sticky-yes') &&
                 // settings.stickyOptions &&
-                $( '#' + settings.stickyOptions.targetId ).length &&
-                ! settings.stickyOptions.disableOn.includes( elementorFrontend.getCurrentDeviceMode() );
+                $('#' + settings.stickyOptions.targetId).length &&
+                !settings.stickyOptions.disableOn.includes(elementorFrontend.getCurrentDeviceMode());
 
-            if ( isSticky ) {
+            if (isSticky) {
                 stickyProps = settings.stickyOptions;
 
-                stickyProps.spacerClass = 'premium-sticky-spacer-' + $( '#' + stickyProps.targetId ).data('id');
+                stickyProps.spacerClass = 'premium-sticky-spacer-' + $('#' + stickyProps.targetId).data('id');
 
-                $( '#' + stickyProps.targetId ).addClass('premium-sticky-active');
+                $('#' + stickyProps.targetId).addClass('premium-sticky-active');
 
-                setStickyWidth( stickyProps );
+                setStickyWidth(stickyProps);
 
                 // Add spacer to save the sticky target space in the dom.
-                if ( 0 === $('.' + stickyProps.spacerClass).length ) {
-                    $('<div class="'+ stickyProps.spacerClass + '"></div>').insertBefore( '#' + stickyProps.targetId );
+                if (0 === $('.' + stickyProps.spacerClass).length) {
+                    $('<div class="' + stickyProps.spacerClass + '"></div>').insertBefore('#' + stickyProps.targetId);
                 }
 
                 $(window).on('load', applyStickyEffect);
@@ -204,8 +204,8 @@
             } else {
                 $(window).off('scroll.PaStickyNav');
 
-                $('<div class="'+ stickyProps.spacerClass + '"></div>').remove(); // remove spacer
-                $( '#' + stickyProps.targetId ).removeClass('premium-sticky-parent premium-sticky-active premium-sticky-parent-'+ $scope.data('id')).css({ // unset style
+                $('<div class="' + stickyProps.spacerClass + '"></div>').remove(); // remove spacer
+                $('#' + stickyProps.targetId).removeClass('premium-sticky-parent premium-sticky-active premium-sticky-parent-' + $scope.data('id')).css({ // unset style
                     top: 'unset',
                     width: 'inherit',
                     position: 'relative'
@@ -217,23 +217,23 @@
          * we need to get the original width before setting
          * the position to fixed.
          */
-        function setStickyWidth( stickyProps ) {
+        function setStickyWidth(stickyProps) {
             // TODO: check if we can use the spacer's width directly instead.
             var currStickyWidth = stickyWidthIndex + elementorFrontend.getCurrentDeviceMode(),
-                isSticky = $( '#' + stickyProps.targetId ).hasClass('premium-sticky-parent'); // ==> fixed position
+                isSticky = $('#' + stickyProps.targetId).hasClass('premium-sticky-parent'); // ==> fixed position
 
             if (isSticky) {
-                $( '#' + stickyProps.targetId ).css({
+                $('#' + stickyProps.targetId).css({
                     position: 'relative',
                     width: 'inherit'
                 });
             }
 
-            window[currStickyWidth] = $( '#' + stickyProps.targetId ).outerWidth() + 'px';
+            window[currStickyWidth] = $('#' + stickyProps.targetId).outerWidth() + 'px';
 
-            if ( isSticky ) {
+            if (isSticky) {
 
-                $( '#' + stickyProps.targetId ).css({
+                $('#' + stickyProps.targetId).css({
                     position: 'fixed',
                     width: window[currStickyWidth]
                 });
@@ -246,15 +246,15 @@
                 scrollTop = $(window).scrollTop() + $adminBarHeight,
                 currStickyWidth = stickyWidthIndex + elementorFrontend.getCurrentDeviceMode();
 
-            if ( ! window[ stickyIndex ] || refreshPos ) { // save the offset
-                window[ stickyIndex ] = $( '.' + stickyProps.spacerClass ).offset().top;
+            if (!window[stickyIndex] || refreshPos) { // save the offset
+                window[stickyIndex] = $('.' + stickyProps.spacerClass).offset().top;
                 refreshPos = false;
             }
 
-            if ( scrollTop >= window[ stickyIndex ] ) {
+            if (scrollTop >= window[stickyIndex]) {
 
-                $('.' + stickyProps.spacerClass).css('height', $( '#' + stickyProps.targetId ).outerHeight()  + 'px');
-                $( '#' + stickyProps.targetId ).addClass('premium-sticky-parent premium-sticky-parent-'+ $scope.data('id')).css({
+                $('.' + stickyProps.spacerClass).css('height', $('#' + stickyProps.targetId).outerHeight() + 'px');
+                $('#' + stickyProps.targetId).addClass('premium-sticky-parent premium-sticky-parent-' + $scope.data('id')).css({
                     width: window[currStickyWidth],
                     top: $adminBarHeight,
                     position: 'fixed'
@@ -262,7 +262,7 @@
 
             } else {
                 $('.' + stickyProps.spacerClass).css('height', '0px');
-                $( '#' + stickyProps.targetId ).removeClass('premium-sticky-parent premium-sticky-parent-'+ $scope.data('id')).css({
+                $('#' + stickyProps.targetId).removeClass('premium-sticky-parent premium-sticky-parent-' + $scope.data('id')).css({
                     top: 'unset',
                     width: 'inherit',
                     position: 'relative'
@@ -273,9 +273,9 @@
             if (stickyProps.onScroll) {
                 var $element = document.querySelector('#' + stickyProps.targetId + '.premium-sticky-parent');
 
-                if ( $element ) {
+                if ($element) {
                     $('#' + stickyProps.targetId + '.premium-sticky-parent').addClass('premium-sticky-scroll-yes');
-                    var headroom  = new Headroom($element,
+                    var headroom = new Headroom($element,
                         {
                             tolerance: 5,
                             classes: {
@@ -283,7 +283,7 @@
                                 pinned: "slideDown",
                                 unpinned: "slideUp",
                                 offset: {
-                                    up: $( '#' + stickyProps.targetId ).outerHeight() + 150, // first time only.
+                                    up: $('#' + stickyProps.targetId).outerHeight() + 150, // first time only.
                                 },
                             }
                         });

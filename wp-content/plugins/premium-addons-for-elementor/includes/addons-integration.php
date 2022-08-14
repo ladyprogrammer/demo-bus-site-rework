@@ -74,8 +74,6 @@ class Addons_Integration {
 
 		add_action( 'elementor/editor/before_enqueue_styles', array( $this, 'enqueue_editor_styles' ) );
 
-		add_action( 'elementor/widgets/widgets_registered', array( $this, 'widgets_area' ) );
-
 		add_action( 'elementor/editor/after_enqueue_styles', array( $this, 'load_live_editor_modal' ) );
 
 		add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'live_editor_enqueue' ) );
@@ -96,13 +94,17 @@ class Addons_Integration {
 
 		add_action( 'wp_ajax_get_elementor_template_content', array( $this, 'get_template_content' ) );
 
-		if ( self::$modules['premium-equal-height'] || self::$modules['premium-blog'] || self::$modules['pa-display-conditions'] ) {
-
-			add_action( 'elementor/controls/controls_registered', array( $this, 'init_pa_controls' ) );
-
-			add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'after_enqueue_scripts' ) );
-
+		if ( defined( 'ELEMENTOR_VERSION' ) ) {
+			if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '>=' ) ) {
+				add_action( 'elementor/controls/register', array( $this, 'init_pa_controls' ) );
+				add_action( 'elementor/widgets/register', array( $this, 'widgets_area' ) );
+			} else {
+				add_action( 'elementor/controls/controls_registered', array( $this, 'init_pa_controls' ) );
+				add_action( 'elementor/widgets/widgets_registered', array( $this, 'widgets_area' ) );
+			}
 		}
+
+		add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'after_enqueue_scripts' ) );
 
 		$this->load_pa_extensions();
 
@@ -967,7 +969,7 @@ class Addons_Integration {
 	 */
 	public function register_addon( $file ) {
 
-		$widget_manager = \Elementor\Plugin::instance()->widgets_manager;
+		$widgets_manager = \Elementor\Plugin::instance()->widgets_manager;
 
 		$base  = basename( str_replace( '.php', '', $file ) );
 		$class = ucwords( str_replace( '-', ' ', $base ) );
@@ -987,8 +989,13 @@ class Addons_Integration {
 		}
 
 		if ( class_exists( $class, false ) ) {
-			$widget_manager->register_widget_type( new $class() );
+			if ( defined( 'ELEMENTOR_VERSION' ) && version_compare( ELEMENTOR_VERSION, '3.5.0', '>=' ) ) {
+				$widgets_manager->register( new $class() );
+			} else {
+				$widgets_manager->register_widget_type( new $class() );
+			}
 		}
+
 	}
 
 	/**
@@ -1001,67 +1008,70 @@ class Addons_Integration {
 	 */
 	public function init_pa_controls() {
 
-		$control_manager = \Elementor\Plugin::instance();
+		if ( self::$modules['premium-equal-height'] || self::$modules['premium-blog'] || self::$modules['pa-display-conditions'] ) {
 
-		if ( version_compare( ELEMENTOR_VERSION, '3.6.0', '>=' ) ) {
+			$control_manager = \Elementor\Plugin::instance();
 
-			// TODO: NEEDS TO BE DYNAMIC.
-			if ( self::$modules['premium-equal-height'] ) {
+			if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '>=' ) ) {
 
-				require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-select.php';
-				$premium_select = __NAMESPACE__ . '\Controls\Premium_Select';
-				$control_manager->controls_manager->register( new $premium_select() );
+				// TODO: NEEDS TO BE DYNAMIC.
+				if ( self::$modules['premium-equal-height'] ) {
 
-			}
+					require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-select.php';
+					$premium_select = __NAMESPACE__ . '\Controls\Premium_Select';
+					$control_manager->controls_manager->register( new $premium_select() );
 
-			if ( self::$modules['premium-blog'] ) {
+				}
 
-				require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-post-filter.php';
-				require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-tax-filter.php';
+				if ( self::$modules['premium-blog'] ) {
 
-				$premium_post_filter = __NAMESPACE__ . '\Controls\Premium_Post_Filter';
-				$premium_tax_filter  = __NAMESPACE__ . '\Controls\Premium_Tax_Filter';
+					require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-post-filter.php';
+					require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-tax-filter.php';
 
-				$control_manager->controls_manager->register( new $premium_post_filter() );
-				$control_manager->controls_manager->register( new $premium_tax_filter() );
+					$premium_post_filter = __NAMESPACE__ . '\Controls\Premium_Post_Filter';
+					$premium_tax_filter  = __NAMESPACE__ . '\Controls\Premium_Tax_Filter';
 
-			}
+					$control_manager->controls_manager->register( new $premium_post_filter() );
+					$control_manager->controls_manager->register( new $premium_tax_filter() );
 
-			if ( self::$modules['pa-display-conditions'] ) {
+				}
 
-				require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-acf-selector.php';
-				$premium_acf_selector = __NAMESPACE__ . '\Controls\Premium_Acf_Selector';
-				$control_manager->controls_manager->register( new $premium_acf_selector() );
+				if ( self::$modules['pa-display-conditions'] ) {
 
-			}
-		} else {
-			if ( self::$modules['premium-equal-height'] ) {
+					require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-acf-selector.php';
+					$premium_acf_selector = __NAMESPACE__ . '\Controls\Premium_Acf_Selector';
+					$control_manager->controls_manager->register( new $premium_acf_selector() );
 
-				require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-select.php';
-				$premium_select = __NAMESPACE__ . '\Controls\Premium_Select';
-				$control_manager->controls_manager->register_control( $premium_select::TYPE, new $premium_select() );
+				}
+			} else {
+				if ( self::$modules['premium-equal-height'] ) {
 
-			}
+					require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-select.php';
+					$premium_select = __NAMESPACE__ . '\Controls\Premium_Select';
+					$control_manager->controls_manager->register_control( $premium_select::TYPE, new $premium_select() );
 
-			if ( self::$modules['premium-blog'] ) {
+				}
 
-				require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-post-filter.php';
-				require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-tax-filter.php';
+				if ( self::$modules['premium-blog'] ) {
 
-				$premium_post_filter = __NAMESPACE__ . '\Controls\Premium_Post_Filter';
-				$premium_tax_filter  = __NAMESPACE__ . '\Controls\Premium_Tax_Filter';
+					require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-post-filter.php';
+					require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-tax-filter.php';
 
-				$control_manager->controls_manager->register_control( $premium_post_filter::TYPE, new $premium_post_filter() );
-				$control_manager->controls_manager->register_control( $premium_tax_filter::TYPE, new $premium_tax_filter() );
+					$premium_post_filter = __NAMESPACE__ . '\Controls\Premium_Post_Filter';
+					$premium_tax_filter  = __NAMESPACE__ . '\Controls\Premium_Tax_Filter';
 
-			}
+					$control_manager->controls_manager->register_control( $premium_post_filter::TYPE, new $premium_post_filter() );
+					$control_manager->controls_manager->register_control( $premium_tax_filter::TYPE, new $premium_tax_filter() );
 
-			if ( self::$modules['pa-display-conditions'] ) {
+				}
 
-				require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-acf-selector.php';
-				$premium_acf_selector = __NAMESPACE__ . '\Controls\Premium_Acf_Selector';
-				$control_manager->controls_manager->register_control( $premium_acf_selector::TYPE, new $premium_acf_selector() );
+				if ( self::$modules['pa-display-conditions'] ) {
 
+					require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-acf-selector.php';
+					$premium_acf_selector = __NAMESPACE__ . '\Controls\Premium_Acf_Selector';
+					$control_manager->controls_manager->register_control( $premium_acf_selector::TYPE, new $premium_acf_selector() );
+
+				}
 			}
 		}
 
