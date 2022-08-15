@@ -119,7 +119,7 @@ class Acf_Text extends Condition {
 
 		$input_val = sanitize_text_field( $compare_val );
 
-		$condition_result = ( ! empty( $input_val ) && $value === $input_val ) ? true : false;
+		$condition_result = ( $value === $input_val ) ? true : false;
 
 		return Helper_Functions::get_final_result( $condition_result, $operator );
 	}

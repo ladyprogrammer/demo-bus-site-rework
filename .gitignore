@@ -6,3 +6,6 @@ cgi-bin
 .DS_Store
 access_log
 error_log
+
+# IDE
+/.vscode

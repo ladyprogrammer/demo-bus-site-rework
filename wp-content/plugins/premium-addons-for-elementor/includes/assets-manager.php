@@ -532,7 +532,7 @@ class Assets_Manager {
 		$file_content = rplg_urlopen( $path );
 
 		if ( isset( $file_content['code'] ) ) {
-			if ( 404 === $file_content['code'] ) {
+			if ( in_array( $file_content['code'], array( 404, 401 ), true ) ) {
 				return '';
 			}
 		}
