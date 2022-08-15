@@ -33,16 +33,16 @@ function bus_scripts() {
 		// stylesheets
 		wp_enqueue_style('roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap');
 		wp_enqueue_style('poppins-font', 'https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap');
-		wp_enqueue_style('icomoon-fonts', 'http://victoryliner.com:8080/assets/fonts/icomoon/style.css');
-		wp_enqueue_style('rome', 'http://victoryliner.com:8080/assets/css/rome.css');
+		wp_enqueue_style('icomoon-fonts', '/assets/fonts/icomoon/style.css');
+		wp_enqueue_style('rome', '/assets/css/rome.css');
 		wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css');
-		wp_enqueue_style('bus-ticketing', 'http://victoryliner.com:8080/assets/css/style.css');
+		wp_enqueue_style('bus-ticketing', '/assets/css/style.css');
 
 		// javascripts
 		wp_enqueue_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js');
-		wp_enqueue_script('popper', 'http://victoryliner.com:8080/assets/js/popper.min.js');
-		wp_enqueue_script('rome', 'http://victoryliner.com:8080/assets/js/rome.js');
-		wp_enqueue_script('bus-ticketing', 'http://victoryliner.com:8080/assets/js/bus-ticketing.js');
+		wp_enqueue_script('popper', '/assets/js/popper.min.js');
+		wp_enqueue_script('rome', '/assets/js/rome.js');
+		wp_enqueue_script('bus-ticketing', '/assets/js/bus-ticketing.js');
 	}
 }
 add_action('wp_enqueue_scripts', 'bus_scripts');
